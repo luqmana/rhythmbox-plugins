@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import gst
 from ConfDialog import ConfDialog
 import Conf
 
-from gi.repository import GObject, Peas
+import rb
+from gi.repository import GObject, Gst, Peas
 from gi.repository import RB
 
 class EqualizerPlugin(GObject.Object, Peas.Activatable):
@@ -31,51 +31,52 @@ class EqualizerPlugin(GObject.Object, Peas.Activatable):
 
 	def do_activate(self):
 		self.shell = self.object
-		self.conf = Conf.Config()
-		#eq = gst.element_factory_make("equalizer-10bands")
-		#self.eq = eq
-		#self.conf.apply_settings(eq)
-		#glade_f = rb.Plugin.find_file("equalizer-prefs.glade")
-		#dialog = ConfDialog(glade_f, self.conf, eq)
-		#dialog.add_ui(self, self.shell)
-		#self.dialog = dialog
+		self.sp = self.shell.props.shell_player
 		
-		sp = self.shell.props.shell_player
-		self.psc_id = sp.connect('playing-song-changed', self.playing_song_changed)
+		self.conf = Conf.Config()
+		self.eq = Gst.ElementFactory.make('equalizer-10bands', None)
+		self.conf.apply_settings(self.eq)
+		
+		glade_f = rb.find_plugin_file(self, "equalizer-prefs.ui")
+		self.dialog = ConfDialog(glade_f, self.conf, self.eq)
+		self.dialog.add_ui(self, self.shell)
+		
+		self.psc_id = self.sp.connect('playing-song-changed',
+		                              self.playing_song_changed)
 
-		#if (sp.get_playing()):
-			#sp.stop()
-			#sp.props.player.add_filter(eq)
-			#sp.play()
-		#else:
-			#sp.props.player.add_filter(eq)
+		if (self.sp.get_playing()):
+			self.sp.stop()
+			self.sp.props.player.add_filter(self.eq)
+			self.sp.play()
+		else:
+			self.sp.props.player.add_filter(self.eq)
 
 	def do_deactivate(self):
 	
-		sp = self.shell.props.shell_player
-		sp.disconnect(self.psc_id)
+		self.sp.disconnect(self.psc_id)
 			
-		#if (sp.get_playing()):
-			#sp.stop()
-			#sp.props.player.remove_filter(self.eq)
-			#sp.play()
-		#else:
-			#sp.props.player.remove_filter(self.eq)
+		if (self.sp.get_playing()):
+			self.sp.stop()
+			self.sp.props.player.remove_filter(self.eq)
+			self.sp.play()
+		else:
+			self.sp.props.player.remove_filter(self.eq)
 		
+		del self.sp
 		del self.shell
 		del self.conf
 		del self.dialog
-		#del self.eq
+		del self.eq
 
 	def playing_song_changed(self, sp, entry):
 		if entry == None:
 			return
 			
 		genre = entry.get_string(RB.RhythmDBPropType.GENRE)
-		#if self.conf.preset_exists(genre):
-		#	self.conf.change_preset(genre, self.eq)
+		if self.conf.preset_exists(genre):
+			self.conf.change_preset(genre, self.eq)
 
-	#def create_configure_dialog(self, dialog=None):
-		#dialog = self.dialog.get_dialog()
-		#dialog.present()
-		#return dialog
+	def create_configure_dialog(self, dialog=None):
+		dialog = self.dialog.get_dialog()
+		dialog.present()
+		return dialog

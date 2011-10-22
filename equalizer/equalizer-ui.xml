@@ -1,0 +1,14 @@
+<ui> 
+  <menubar name="MenuBar"> 
+    <menu name="ControlMenu" action="Control"> 
+	  <placeholder name="PluginPlaceholder">
+		<menuitem name="Equalizer" action="Equalize"/>
+	  </placeholder>
+    </menu>
+  </menubar>
+  <toolbar name="ToolBar">
+	  <placeholder name="PluginPlaceholder">
+		<toolitem name="Equalizer" action="Equalize"/>
+	  </placeholder>
+  </toolbar>
+</ui>

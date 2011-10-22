@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import gconf
+from gi.repository import GConf
 
 EQUALIZER_GCONF_PREFIX = '/apps/rhythmbox/plugins/equalizer'
 EQUALIZER_PRESET = 'preset'
@@ -35,7 +35,7 @@ class Config:
 					'band8',
 					'band9']
 
-		self.gconf = gconf.client_get_default()
+		self.gconf = GConf.Client.get_default()
 		self.config = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0,0]
 		if self.gconf.get_string(EQUALIZER_GCONF_PREFIX+'/'+EQUALIZER_PRESET):
 			self.preset = self.gconf.get_string(EQUALIZER_GCONF_PREFIX+'/'+EQUALIZER_PRESET)
