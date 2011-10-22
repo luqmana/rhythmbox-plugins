@@ -1,7 +1,7 @@
-[RB Plugin]
+[Plugin]
 Loader=python
 Module=equalizer
-IAge=1
+IAge=2
 Name=Equalizer
 Description=10 Band Equalizer
 Authors=Teemu Kallio <teemu.kallio@cs.helsinki.fi>;Floreal Morandat <morandat AT lirmm DOT fr>

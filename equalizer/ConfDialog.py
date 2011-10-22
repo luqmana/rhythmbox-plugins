@@ -16,8 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import gtk, gtk.glade
-import gnomevfs, gnome
+from gi.repository import Gtk, Gio
 import Conf
 
 STOCK_IMAGE = "stock-equalizer-button"
@@ -26,7 +25,9 @@ class ConfDialog(object):
 	def __init__(self, glade_file, conf, eq):
 		self.eq = eq
 		self.conf = conf
-		gladexml = gtk.glade.XML(glade_file)
+		#gladexml = Gtk.glade.XML(glade_file)
+		gladexml = Gtk.Builder()
+		gladexml.add_from_file(glade_file)
 	
 		self.dialog = gladexml.get_widget('preferences_dialog')
 		self.dialog.connect("response", self.dialog_response)
@@ -91,16 +92,16 @@ class ConfDialog(object):
 		eq.set_property('band' + `i`, val)
 		
 	def add_ui(self, plugin, shell):
-		icon_factory = gtk.IconFactory()
-		icon_factory.add(STOCK_IMAGE, gtk.IconSet(gtk.gdk.pixbuf_new_from_file(plugin.find_file("equalizer.svg"))))
+		icon_factory = Gtk.IconFactory()
+		icon_factory.add(STOCK_IMAGE, Gtk.IconSet(Gtk.gdk.pixbuf_new_from_file(plugin.find_file("equalizer.svg"))))
 		icon_factory.add_default()
 
-		action = gtk.Action ('Equalize', 
+		action = Gtk.Action ('Equalize', 
 				_('_Equalizer'), 
 				_('10 Band Equalizer'),
 				STOCK_IMAGE)
 		action.connect ('activate', self.show_ui, shell)
-		action_group = gtk.ActionGroup ('EqualizerActionGroup')
+		action_group = Gtk.ActionGroup ('EqualizerActionGroup')
 		action_group.add_action (action)
 		shell.get_ui_manager().insert_action_group (action_group, -1)
 		ui_manager = shell.get_ui_manager()
