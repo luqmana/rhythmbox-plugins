@@ -49,6 +49,17 @@ class Config:
 			self.preset = "default"
 		
 		self.read_settings(self.preset)
+		
+	def reset_all(self):
+		self.gconf.recursive_unset(EQUALIZER_GCONF_PREFIX, 0)	
+		
+		# Create default preset
+		if not self.gconf.dir_exists(EQUALIZER_GCONF_PREFIX + '/default'):
+			for i in range(0, 10):
+				self.gconf.set_float(self.make_path(self.gconf_keys[i], 'default'), self.config[i])
+				
+		self.preset = "default"
+		self.read_settings(self.preset)
 
 	def read_settings(self, preset):
 		for i in range(0,10):

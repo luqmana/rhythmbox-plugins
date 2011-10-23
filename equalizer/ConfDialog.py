@@ -54,6 +54,10 @@ class ConfDialog(object):
 			#gc.set_float(path, default)
 		conf.apply_settings(eq)
 		
+	def cleanup(self):
+		self.plugin.shell.get_ui_manager().remove_action_group(self.action_group)
+		self.plugin.shell.get_ui_manager().remove_ui(self.ui)
+		
 	def on_destroy(self, dialog):
 		dialog.hide()
 		self.__init__(self.plugin.glade_f, self.conf, self.eq, self.plugin)
@@ -84,7 +88,15 @@ class ConfDialog(object):
 		return self.dialog
 
 	def dialog_response(self, dialog, response):
+		if (response == -4):
+			self.conf.write_settings()
+			dialog.hide()
+			
 		if (response == -6):
+			self.conf.reset_all()
+			self.box.set_active(0)
+		
+		if (response == -8 or -6):
 			if self.box.get_active_text() == "default":
 				self.conf.config = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 			else:
@@ -92,11 +104,7 @@ class ConfDialog(object):
 				self.conf.config = list(self.eq.get_property('band' + str(i)) for i in range(0,10))
 				
 			self.update_bands()
-
-		elif (response == -4 or response == -7):
-			self.conf.write_settings()
-			dialog.hide()
-
+						
 	def preset_change(self, entry):
 		new_preset = entry.get_active_text()
 		if new_preset != '':
@@ -125,11 +133,11 @@ class ConfDialog(object):
 				_('10 Band Equalizer'),
 				STOCK_IMAGE)
 		action.connect ('activate', self.show_ui, shell)
-		action_group = Gtk.ActionGroup ('EqualizerActionGroup')
-		action_group.add_action (action)
-		shell.get_ui_manager().insert_action_group (action_group, -1)
+		self.action_group = Gtk.ActionGroup ('EqualizerActionGroup')
+		self.action_group.add_action (action)
+		shell.get_ui_manager().insert_action_group (self.action_group, -1)
 		ui_manager = shell.get_ui_manager()
-		ui_manager.add_ui_from_file(rb.find_plugin_file(plugin, "equalizer-ui.xml"))
+		self.ui = ui_manager.add_ui_from_file(rb.find_plugin_file(plugin, "equalizer-ui.xml"))
 
 	def show_ui(self, shell, state):
 		self.read_presets()
