@@ -23,7 +23,8 @@ import Conf
 STOCK_IMAGE = "stock-equalizer-button"
 
 class ConfDialog(object):
-	def __init__(self, glade_file, conf, eq):
+	def __init__(self, glade_file, conf, eq, plugin):
+		self.plugin = plugin
 		self.eq = eq
 		self.conf = conf
 		gladexml = Gtk.Builder()
@@ -31,6 +32,8 @@ class ConfDialog(object):
 	
 		self.dialog = gladexml.get_object('preferences_dialog')
 		self.dialog.connect("response", self.dialog_response)
+		self.dialog.connect("destroy", self.on_destroy)
+		self.dialog.connect("close", self.on_destroy)
 
 		box = gladexml.get_object("presetchooser")
 		self.box = box
@@ -50,7 +53,12 @@ class ConfDialog(object):
 		self.update_bands()
 			#gc.set_float(path, default)
 		conf.apply_settings(eq)
-
+		
+	def on_destroy(self, dialog):
+		dialog.hide()
+		self.__init__(self.plugin.glade_f, self.conf, self.eq, self.plugin)
+		return True	
+        
 	def read_presets(self):
 		box = self.box
 		conf = self.conf
@@ -76,7 +84,7 @@ class ConfDialog(object):
 		return self.dialog
 
 	def dialog_response(self, dialog, response):
-		if(response == -6):
+		if (response == -6):
 			if self.box.get_active_text() == "default":
 				self.conf.config = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 			else:
@@ -85,7 +93,7 @@ class ConfDialog(object):
 				
 			self.update_bands()
 
-		if(response == -4 or response == -7):
+		elif (response == -4 or response == -7):
 			self.conf.write_settings()
 			dialog.hide()
 
@@ -105,7 +113,8 @@ class ConfDialog(object):
 		eq.set_property('band' + `i`, val)
 		self.conf.write_settings()
 		
-	def add_ui(self, plugin, shell):
+	def add_ui(self, shell):
+		plugin = self.plugin
 		icon_factory = Gtk.IconFactory()
 		pxbf = GdkPixbuf.Pixbuf.new_from_file(rb.find_plugin_file(plugin, "equalizer.svg"))
 		icon_factory.add(STOCK_IMAGE, Gtk.IconSet.new_from_pixbuf(pxbf))

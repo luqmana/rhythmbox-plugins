@@ -37,10 +37,11 @@ class EqualizerPlugin(GObject.Object, Peas.Activatable):
 		self.eq = Gst.ElementFactory.make('equalizer-10bands', None)
 		self.conf.apply_settings(self.eq)
 		
-		glade_f = rb.find_plugin_file(self, "equalizer-prefs.ui")
-		self.dialog = ConfDialog(glade_f, self.conf, self.eq)
-		self.dialog.add_ui(self, self.shell)
+		self.glade_f = rb.find_plugin_file(self, "equalizer-prefs.ui")
 		
+		self.dialog = ConfDialog(self.glade_f, self.conf, self.eq, self)
+		self.dialog.add_ui(self.shell)
+				
 		self.psc_id = self.sp.connect('playing-song-changed',
 		                              self.playing_song_changed)
 
@@ -63,6 +64,7 @@ class EqualizerPlugin(GObject.Object, Peas.Activatable):
 			self.sp.props.player.remove_filter(self.eq)
 		
 		del self.sp
+		del self.glade_f
 		del self.shell
 		del self.conf
 		del self.dialog
@@ -75,7 +77,7 @@ class EqualizerPlugin(GObject.Object, Peas.Activatable):
 		genre = entry.get_string(RB.RhythmDBPropType.GENRE)
 		if self.conf.preset_exists(genre):
 			self.conf.change_preset(genre, self.eq)
-
+			
 	def create_configure_dialog(self, dialog=None):
 		dialog = self.dialog.get_dialog()
 		dialog.present()

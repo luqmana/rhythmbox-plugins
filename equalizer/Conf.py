@@ -85,6 +85,9 @@ class Config:
 	def change_preset(self, new_preset, eq):
 		if new_preset:
 			m_preset = self.mangle(new_preset)
+		else:
+			return
+			
 		if self.preset_exists(m_preset):
 			self.preset = self.mangle(m_preset)
 			self.read_settings(self.preset)
