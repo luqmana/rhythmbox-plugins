@@ -20,8 +20,11 @@
     h1 .small { font-size: 0.4em; }
     h1 a { text-decoration: none }
     h2 { font-size: 1.5em; color: gray; }
-    h3 { text-align: center; color: gray; }
+    h3 { font-size: 1.3em; text-align: center; color: gray; }
+    h4 { font-size: 1.2em; text-align: center; color: gray; }
     a { color: #3366FF; }
+    .clear { clear:both; }
+    .screenshots { display: block; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
     .download { float: right; }
     pre { background: #000; color: #fff; padding: 15px;}
@@ -55,8 +58,47 @@
    	</p>
    	<p>
     	Rhythmbox features an extensible plugin system based on <a href="http://live.gnome.org/Libpeas">libpeas</a>. Rhythmbox uses GTK+3 as its toolkit, but may plugins have not been updated to work with both the new plugin API and a GNOME3 stack. Unfortunately a lot of plugins are of the "one-off" kind meaning the author just wrote the plugin and hasn't updated it since. This page will grow over time as I attempt to port many of these plugins.
+    </p><p>&nbsp;</p>
+    
+    <hr />
+        
+    <h3>Rhythmbox Equalizer</h3>
+    
+    <p>
+    	A 10 band equalizer for Rhythmbox. Originally by Teemu Kallio «teemu.kallio AT cs.helsinki.fi» sometime in 2008. It ties in directly to the GStreamer framework which powers Rhythmbox. Floreal Morandat «morandat AT lirmm.fr» later expanded on the code and actually maintains the <a href="http://www.lirmm.fr/~morandat/index.php/Main/Tools">current homepage</a> for the site though it hasn't been updated in quite a while.
+   	</p>
+   	<p>
+    	I've porting the code to use the new GObject introspection stuff allowing it to work on a GNOME3 stack. I've also fixed some bugs and added in support for selecting the builtin GStreamer presets.
+    	
     </p>
+    
+    <h4>Install</h4>
+    
+    <p>
+    	First get the source by either downloading a ZIP/Tar file or from GIT:
+    	<pre>$ git clone git://github.com/luqmana/rhythmbox-plugins</pre>
+    	
+    	Next we want the equalizer plugin so we need to put it somewhere where Rhythmbox will find it:
+    	<pre>$ mkdir -p ~/.local/share/rhythmbox/plugins/
+$ mv equalizer ~/.local/share/rhythmbox/plugins/</pre>
 
+		<br />Now just remove the other files if you don't want any other plugins and you're done! You can now enable the equalizer plugin from within Rhythmbox (Edit→Plugins).
+    	
+    </p>
+    
+    <h4>Screenshots</h4>
+    
+    <div class="screenshots">
+    
+    	<a href="http://i.imgur.com/dKK68.png"><img style="float:left; width:49%;" src="http://i.imgur.com/dKK68.png" /></a>
+    	<a href="http://i.imgur.com/Ceq94.png"><img style="float:right; width:49%;" src="http://i.imgur.com/Ceq94.png" /></a>
+    
+    </div>
+    
+    <div class="clear"></div>
+    <p>&nbsp;</p>
+    <hr />
+    
     <h2>Download</h2>
     <p>
       You can download this project in either
