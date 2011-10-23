@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import rb
-from gi.repository import Gtk, Gio, Gdk, GdkPixbuf
+from gi.repository import Gtk, Gio, Gdk, GdkPixbuf, Gst
 import Conf
 
 STOCK_IMAGE = "stock-equalizer-button"
@@ -34,6 +34,12 @@ class ConfDialog(object):
 
 		box = gladexml.get_object("presetchooser")
 		self.box = box
+		
+		# workarounds
+		# see https://bugzilla.gnome.org/show_bug.cgi?id=650369#c4
+		self.box.set_entry_text_column(0)
+		self.box.set_id_column(1)
+		
 		self.read_presets()
 		box.connect("changed", self.preset_change)
 
@@ -50,12 +56,15 @@ class ConfDialog(object):
 		conf = self.conf
 		if box:
 			box.get_model().clear()
-		i = 0
+
 		current = conf.demangle(conf.preset)
-		for str in conf.list_preset():
-			preset_entry = conf.demangle(str.rsplit('/',1)[1])
-			box.append_text(preset_entry)
-			if preset_entry == current:
+		s_presets = sorted(Gst.Preset.get_preset_names(self.eq))
+		i = 1
+		box.append_text("default")	
+		box.set_active(0)
+		for preset in s_presets:
+			box.append_text(preset)
+			if (preset == current):
 				box.set_active(i)
 			i += 1
 
@@ -68,8 +77,12 @@ class ConfDialog(object):
 
 	def dialog_response(self, dialog, response):
 		if(response == -6):
-			for i in range(0, 10):
-				self.conf.config[i] = 0.0
+			if self.box.get_active_text() == "default":
+				self.conf.config = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+			else:
+				Gst.Preset.load_preset(self.eq, self.box.get_active_text())
+				self.conf.config = list(self.eq.get_property('band' + str(i)) for i in range(0,10))
+				
 			self.update_bands()
 
 		if(response == -4 or response == -7):
@@ -77,9 +90,9 @@ class ConfDialog(object):
 			dialog.hide()
 
 	def preset_change(self, entry):
-		new_preset = entry.get_text()
+		new_preset = entry.get_active_text()
 		if new_preset != '':
-			self.conf.change_preset(entry.get_text(), self.eq)
+			self.conf.change_preset(entry.get_active_text(), self.eq)
 			self.update_bands()
 
 	def slider_changed(self, hscale):
@@ -90,6 +103,7 @@ class ConfDialog(object):
 		val = self.bands[i].get_value()
 		self.conf.config[i] = val
 		eq.set_property('band' + `i`, val)
+		self.conf.write_settings()
 		
 	def add_ui(self, plugin, shell):
 		icon_factory = Gtk.IconFactory()
