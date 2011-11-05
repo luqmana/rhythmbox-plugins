@@ -96,7 +96,7 @@ class ConfDialog(object):
 			self.conf.reset_all()
 			self.box.set_active(0)
 		
-		if (response == -8 or -6):
+		if (response == -8 or response == -6):
 			if self.box.get_active_text() == "default":
 				self.conf.config = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 			else:
