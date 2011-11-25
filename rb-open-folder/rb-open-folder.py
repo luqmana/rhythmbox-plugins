@@ -16,8 +16,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
 
-import rhythmdb, rb
-import gobject, gtk
+import rb
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import RB
+from gi.repository import Peas
 from subprocess import Popen
 
 ui_str = """
@@ -48,39 +51,43 @@ ui_str = """
 </ui>
 """
 
-class OpenFolder(rb.Plugin):
+class OpenFolder(GObject.Object, Peas.Activatable):
+    __gtype_name = 'OpenFolderPlugin'
+    object = GObject.property (type = GObject.Object)
 
-	def __init__(self):
-		rb.Plugin.__init__(self)
-			
-	def activate(self, shell):
-		self.action = gtk.Action('OpenFolder', _('Open containing folder'),
-					 _('Open the folder that contains the selected song'),
-					 'rb-open-folder')
-		self.activate_id = self.action.connect('activate', self.open_folder, shell)
-		
-		self.action_group = gtk.ActionGroup('OpenFolderPluginActions')
-		self.action_group.add_action(self.action)
-		
-		uim = shell.get_ui_manager ()
-		uim.insert_action_group(self.action_group, 0)
-		self.ui_id = uim.add_ui_from_string(ui_str)
-		uim.ensure_update()
-	
-	def open_folder(self, action, shell):
-		source = shell.get_property("selected_source")
-		entry = rb.Source.get_entry_view(source)
-		selected = entry.get_selected_entries()
-		if selected != []:
-			uri = selected[0].get_playback_uri()
-			dirpath = uri.rpartition('/')[0]
-			if dirpath == "": dirpath = "/"
-			Popen(["xdg-open", dirpath])
-	
-	def deactivate(self, shell):
-		uim = shell.get_ui_manager()
-		uim.remove_ui (self.ui_id)
-		uim.remove_action_group (self.action_group)
+    def __init__(self):
+        GObject.Object.__init__(self)
+            
+    def do_activate(self):
+        shell = self.object
+        self.action = Gtk.Action('OpenFolder', _('Open containing folder'),
+                     _('Open the folder that contains the selected song'),
+                     'rb-open-folder')
+        self.activate_id = self.action.connect('activate', self.open_folder, shell)
+        
+        self.action_group = Gtk.ActionGroup('OpenFolderPluginActions')
+        self.action_group.add_action(self.action)
+        
+        uim = shell.get_ui_manager ()
+        uim.insert_action_group(self.action_group, 0)
+        self.ui_id = uim.add_ui_from_string(ui_str)
+        uim.ensure_update()
+    
+    def open_folder(self, action, shell):
+        source = shell.get_property("selected_page")
+        entry = RB.Source.get_entry_view(source)
+        selected = entry.get_selected_entries()
+        if selected != []:
+            uri = selected[0].get_playback_uri()
+            dirpath = uri.rpartition('/')[0]
+            if dirpath == "": dirpath = "/"
+            Popen(["xdg-open", dirpath])
+    
+    def do_deactivate(self):
+        shell = self.object
+        uim = shell.get_ui_manager()
+        uim.remove_ui (self.ui_id)
+        uim.remove_action_group (self.action_group)
 
-		self.action_group = None
-		self.action = None
+        self.action_group = None
+        self.action = None
