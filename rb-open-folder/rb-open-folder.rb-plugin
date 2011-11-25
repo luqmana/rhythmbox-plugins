@@ -1,0 +1,9 @@
+[RB Plugin]
+Loader=python
+Module=rb-open-folder
+IAge=1
+Name=Open Folder
+Description=Open the folder that contains the selected song
+Authors=Adolfo González Blázquez <code@infinicode.org>
+Copyright=Copyright © 2007, 2008 Adolfo González Blázquez
+Website=http://www.infinicode.org/code/rb/
