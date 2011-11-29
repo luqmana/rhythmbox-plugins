@@ -60,8 +60,8 @@ class OpenFolder(GObject.Object, Peas.Activatable):
             
     def do_activate(self):
         shell = self.object
-        self.action = Gtk.Action('OpenFolder', _('Open containing folder'),
-                     _('Open the folder that contains the selected song'),
+        self.action = Gtk.Action('OpenFolder', _('Open Containing Folder'),
+                     _('Open the folder that contains the selected song.'),
                      'rb-open-folder')
         self.activate_id = self.action.connect('activate', self.open_folder, shell)
         
