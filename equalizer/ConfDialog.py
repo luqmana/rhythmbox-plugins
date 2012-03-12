@@ -51,12 +51,11 @@ class ConfDialog(object):
 			self.bands.append(gladexml.get_object("b" + `i`))
 			self.bands[i].connect("value_changed", self.slider_changed)
 		self.update_bands()
-			#gc.set_float(path, default)
 		conf.apply_settings(eq)
 		
 	def cleanup(self):
-		self.plugin.shell.get_ui_manager().remove_action_group(self.action_group)
-		self.plugin.shell.get_ui_manager().remove_ui(self.ui)
+		self.plugin.shell.props.ui_manager.remove_action_group(self.action_group)
+		self.plugin.shell.props.ui_manager.remove_ui(self.ui)
 		
 	def on_destroy(self, dialog):
 		dialog.hide()
@@ -135,8 +134,8 @@ class ConfDialog(object):
 		action.connect ('activate', self.show_ui, shell)
 		self.action_group = Gtk.ActionGroup ('EqualizerActionGroup')
 		self.action_group.add_action (action)
-		shell.get_ui_manager().insert_action_group (self.action_group, -1)
-		ui_manager = shell.get_ui_manager()
+		shell.props.ui_manager.insert_action_group(self.action_group, -1)
+		ui_manager = shell.props.ui_manager
 		self.ui = ui_manager.add_ui_from_file(rb.find_plugin_file(plugin, "equalizer-ui.xml"))
 
 	def show_ui(self, shell, state):
