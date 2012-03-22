@@ -18,7 +18,8 @@
 from ConfDialog import ConfDialog
 import Conf
 
-import rb
+import os
+
 from gi.repository import GObject, Gst, Peas
 from gi.repository import RB
 
@@ -37,7 +38,7 @@ class EqualizerPlugin(GObject.Object, Peas.Activatable):
 		self.eq = Gst.ElementFactory.make('equalizer-10bands', None)
 		self.conf.apply_settings(self.eq)
 		
-		self.glade_f = rb.find_plugin_file(self, "equalizer-prefs.ui")
+		self.glade_f = self.find_file("equalizer-prefs.ui")
 		
 		self.dialog = ConfDialog(self.glade_f, self.conf, self.eq, self)
 		self.dialog.add_ui(self.shell)
@@ -89,3 +90,13 @@ class EqualizerPlugin(GObject.Object, Peas.Activatable):
 		dialog = self.dialog.get_dialog()
 		dialog.present()
 		return dialog
+
+	def find_file(self, filename):
+		info = self.plugin_info
+		data_dir = info.get_data_dir()
+		path = os.path.join(data_dir, filename)
+		
+		if os.path.exists(path):
+			return path
+
+		return RB.file(filename)

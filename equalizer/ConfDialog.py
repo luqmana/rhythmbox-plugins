@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import rb
 from gi.repository import Gtk, Gio, Gdk, GdkPixbuf, Gst
 import Conf
 
@@ -123,7 +122,7 @@ class ConfDialog(object):
 	def add_ui(self, shell):
 		plugin = self.plugin
 		icon_factory = Gtk.IconFactory()
-		pxbf = GdkPixbuf.Pixbuf.new_from_file(rb.find_plugin_file(plugin, "equalizer.svg"))
+		pxbf = GdkPixbuf.Pixbuf.new_from_file(plugin.find_file("equalizer.svg"))
 		icon_factory.add(STOCK_IMAGE, Gtk.IconSet.new_from_pixbuf(pxbf))
 		icon_factory.add_default()
 
@@ -136,7 +135,7 @@ class ConfDialog(object):
 		self.action_group.add_action (action)
 		shell.props.ui_manager.insert_action_group(self.action_group, -1)
 		ui_manager = shell.props.ui_manager
-		self.ui = ui_manager.add_ui_from_file(rb.find_plugin_file(plugin, "equalizer-ui.xml"))
+		self.ui = ui_manager.add_ui_from_file(plugin.find_file("equalizer-ui.xml"))
 
 	def show_ui(self, shell, state):
 		self.read_presets()
