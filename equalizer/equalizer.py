@@ -46,12 +46,17 @@ class EqualizerPlugin(GObject.Object, Peas.Activatable):
 		self.psc_id = self.sp.connect('playing-song-changed',
 		                              self.playing_song_changed)
 
-		if (self.sp.get_playing()):
-			self.sp.stop()
-			self.sp.props.player.add_filter(self.eq)
-			self.sp.play()
-		else:
-			self.sp.props.player.add_filter(self.eq)
+		try:
+
+			if (self.sp.get_playing()):
+				self.sp.stop()
+				self.sp.props.player.add_filter(self.eq)
+				self.sp.play()
+			else:
+				self.sp.props.player.add_filter(self.eq)
+
+		except:
+			pass
 
 	def do_deactivate(self):
 	
