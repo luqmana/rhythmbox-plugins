@@ -30,6 +30,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.current_artist = None
 		self.current_album = None
 		self.current_song = None
+		self.current_location = None
 		self.visible = True
 
 		self.init_gui()
@@ -75,6 +76,8 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		playing_artist = playing_entry.get_string(RB.RhythmDBPropType.ARTIST)
 		playing_album = playing_entry.get_string(RB.RhythmDBPropType.ALBUM)
 		playing_title = playing_entry.get_string(RB.RhythmDBPropType.TITLE)
+		playing_location = playing_entry.get_string(RB, RhythmDBPropType.PROP_LOCATION)
+        	self.current_location = playing_location 
 
 		if playing_album.upper() == "UNKNOWN":
 			self.current_album = ""
@@ -101,7 +104,12 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 			image = opener.open(request).read()
 		except:
 			print "Failed to download image"
-		filename = os.environ['HOME']+"/.cache/rhythmbox/covers/" + self.current_artist + " - " + self.current_album + ".jpg"
+		#filename = os.environ['HOME']+"/.cache/rhythmbox/covers/" + self.current_artist + " - " + self.current_album + ".jpg"
+		location_path_improper = urllib2.url2pathname(self.current_location)
+		location_path_arr = location_path_improper.split("//")
+		location_path = location_path_arr[1]
+		filename = location_path.rsplit("/",1)[0] + "/" + "folder.jpg"
+
 		output = open(filename, 'w')
 		output.write(image)
 		output.close()
