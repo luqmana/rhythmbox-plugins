@@ -13,6 +13,9 @@ albumart_search_ui = """
 class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 	__gtype_name__ = 'AlbumArtSearchPlugin'
 	object = GObject.property(type = GObject.Object)
+	
+	MODE_RHYTHM = 1
+        MODE_FOLDER = 2
 
 	def __init__(self):
 		GObject.Object.__init__(self)
@@ -30,7 +33,10 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.current_artist = None
 		self.current_album = None
 		self.current_song = None
+		self.current_location = None
 		self.visible = True
+		
+		self.mode = self.MODE_FOLDER
 
 		self.init_gui()
 		self.connect_signals()
@@ -75,6 +81,8 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		playing_artist = playing_entry.get_string(RB.RhythmDBPropType.ARTIST)
 		playing_album = playing_entry.get_string(RB.RhythmDBPropType.ALBUM)
 		playing_title = playing_entry.get_string(RB.RhythmDBPropType.TITLE)
+		playing_location = playing_entry.get_string(RB, RhythmDBPropType.PROP_LOCATION)
+        	self.current_location = playing_location 
 
 		if playing_album.upper() == "UNKNOWN":
 			self.current_album = ""
@@ -101,7 +109,15 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 			image = opener.open(request).read()
 		except:
 			print "Failed to download image"
-		filename = os.environ['HOME']+"/.cache/rhythmbox/covers/" + self.current_artist + " - " + self.current_album + ".jpg"
+		
+		if(self.mode == self.MODE_RHYTHM):
+			filename = os.environ['HOME']+"/.cache/rhythmbox/covers/" + self.current_artist + " - " + self.current_album + ".jpg"
+		else:
+			location_path_improper = urllib2.url2pathname(self.current_location)
+			location_path_arr = location_path_improper.split("//")
+			location_path = location_path_arr[1]
+			filename = location_path.rsplit("/",1)[0] + "/" + "folder.jpg"
+
 		output = open(filename, 'w')
 		output.write(image)
 		output.close()
@@ -122,6 +138,14 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.path = rb.find_plugin_file(self, 'tmpl/albumartsearch-tmpl.html')
 		self.template = Template (filename = self.path, module_directory = '/tmp/')
 		self.styles = self.basepath + '/tmpl/main.css'
+		
+	def toggled_rhythm_radio(self, extra):
+		if(self.rhythmlocradio.get_active()):
+	    		self.mode = self.MODE_RHYTHM
+
+    	def toggled_folder_radio(self, extra):
+    		if(self.folderlocradio.get_active()):
+	    		self.mode = self.MODE_FOLDER 
 
 	def init_gui(self) :
 		self.vbox = Gtk.VBox()
@@ -134,8 +158,22 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.scroll.add( self.webview )
 		self.albumartbutton = Gtk.Button (_("Set as Album Art"))
 
+		self.selectlabel = gtk.Label()
+		self.selectlabel.set_markup("<u>Choose save location</u>")
+		self.rhythmlocradio = gtk.RadioButton(None, "Rhythmbox Location")
+		self.folderlocradio = gtk.RadioButton(self.rhythmlocradio, "Song Folder")
+		self.folderlocradio.set_active(True)	
+		self.rhythmlocradio.connect("toggled", self.toggled_rhythm_radio)
+		self.folderlocradio.connect("toggled", self.toggled_folder_radio)
+		self.hboxlabel = gtk.HBox();
+		
 		self.vbox.pack_start(self.scroll, expand = True, fill = True, padding = 0)
-		self.vbox.pack_start(self.albumartbutton, expand = False, fill = True, padding = 0)
+		self.vbox.pack_start(self.scroll, expand = True, fill = True, padding = 0)
+		self.vbox.pack_start(self.hboxlabel, expand = False, fill = True, padding = 0)
+		self.hboxlabel.pack_start(self.selectlabel, expand = False, fill = True, padding = 0)
+        	self.vbox.pack_start(self.rhythmlocradio, expand = False, fill = True, padding = 0)
+        	self.vbox.pack_start(self.folderlocradio, expand = False, fill = True, padding = 0)
+        	self.vbox.pack_start(self.albumartbutton, expand = False, fill = True, padding = 0)
 
 		#---- pack everything into side panel ----#
 		self.vbox.show_all()
