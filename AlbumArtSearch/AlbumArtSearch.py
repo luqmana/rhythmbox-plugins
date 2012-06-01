@@ -46,7 +46,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 						self.toggle_visibility, True)
 		self.action_group = Gtk.ActionGroup('AlbumArtSearchActions')
 		self.action_group.add_toggle_actions([self.action])
-		uim = self.shell.get_ui_manager()
+		uim = self.shell.props.ui_manager
 		uim.insert_action_group (self.action_group, -1)
 		self.ui_id = uim.add_ui_from_string(albumart_search_ui)
 		uim.ensure_update()
@@ -58,8 +58,8 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		
 		self.shell.remove_widget (self.vbox, RB.ShellUILocation.RIGHT_SIDEBAR)
 
-		self.shell.get_ui_manager().remove_action_group(self.action_group)
-		self.shell.get_ui_manager().remove_ui(self.ui_id)
+		self.shell.props.ui_manager.remove_action_group(self.action_group)
+		self.shell.props.ui_manager.remove_ui(self.ui_id)
 		
 		del self.ui_id
 		del self.action_group
@@ -81,7 +81,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		playing_artist = playing_entry.get_string(RB.RhythmDBPropType.ARTIST)
 		playing_album = playing_entry.get_string(RB.RhythmDBPropType.ALBUM)
 		playing_title = playing_entry.get_string(RB.RhythmDBPropType.TITLE)
-		playing_location = playing_entry.get_string(RB, RhythmDBPropType.PROP_LOCATION)
+		playing_location = playing_entry.get_string(RB.RhythmDBPropType.LOCATION)
         	self.current_location = playing_location 
 
 		if playing_album.upper() == "UNKNOWN":
@@ -96,6 +96,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 
 	def set_album_art(self, button) :
 		tburl = self.webview.get_main_frame().get_title()
+                
 		if not tburl:
 			return
 		print "Url: " + tburl
@@ -112,11 +113,13 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		
 		if(self.mode == self.MODE_RHYTHM):
 			filename = os.environ['HOME']+"/.cache/rhythmbox/covers/" + self.current_artist + " - " + self.current_album + ".jpg"
+       
 		else:
 			location_path_improper = urllib2.url2pathname(self.current_location)
 			location_path_arr = location_path_improper.split("//")
 			location_path = location_path_arr[1]
 			filename = location_path.rsplit("/",1)[0] + "/" + "folder.jpg"
+                    
 
 		output = open(filename, 'w')
 		output.write(image)
@@ -158,14 +161,14 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.scroll.add( self.webview )
 		self.albumartbutton = Gtk.Button (_("Set as Album Art"))
 
-		self.selectlabel = gtk.Label()
+		self.selectlabel = Gtk.Label()
 		self.selectlabel.set_markup("<u>Choose save location</u>")
-		self.rhythmlocradio = gtk.RadioButton(None, "Rhythmbox Location")
-		self.folderlocradio = gtk.RadioButton(self.rhythmlocradio, "Song Folder")
+		self.rhythmlocradio = Gtk.RadioButton(None, "Rhythmbox Location")
+		self.folderlocradio = Gtk.RadioButton(self.rhythmlocradio, "Song Folder")
 		self.folderlocradio.set_active(True)	
 		self.rhythmlocradio.connect("toggled", self.toggled_rhythm_radio)
 		self.folderlocradio.connect("toggled", self.toggled_folder_radio)
-		self.hboxlabel = gtk.HBox();
+		self.hboxlabel = Gtk.HBox();
 		
 		self.vbox.pack_start(self.scroll, expand = True, fill = True, padding = 0)
 		self.vbox.pack_start(self.scroll, expand = True, fill = True, padding = 0)
