@@ -14,7 +14,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 	__gtype_name__ = 'AlbumArtSearchPlugin'
 	object = GObject.property(type = GObject.Object)
 	
-	MODE_MUSIC  = 1
+	MODE_PICTURES  = 1
 	MODE_RHYTHM = 2
         MODE_FOLDER = 3
 
@@ -37,7 +37,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.current_location = None
 		self.visible = True
 		
-		self.mode = self.MODE_MUSIC
+		self.mode = self.MODE_PICTURES
 
 		self.init_gui()
 		self.connect_signals()
@@ -114,8 +114,8 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		
 		save_filename=self.current_artist + " - " + self.current_album + ".jpg"
 
-                if(self.mode == self.MODE_MUSIC):
-			covers_folder = glib.get_user_special_dir(glib.USER_DIRECTORY_MUSIC)
+                if(self.mode == self.MODE_PICTURES):
+			covers_folder = glib.get_user_special_dir(glib.USER_DIRECTORY_PICTURES)
 			filename = covers_folder + "/" + save_filename
 
 		if(self.mode == self.MODE_RHYTHM):
@@ -159,9 +159,9 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
     		if(self.folderlocradio.get_active()):
 	    		self.mode = self.MODE_FOLDER 
 
-    	def toggled_music_radio(self, extra):
-    		if(self.folderlocradio.get_active()):
-	    		self.mode = self.MODE_MUSIC 
+    	def toggled_pictures_radio(self, extra):
+    		if(self.pictureslocradio.get_active()):
+	    		self.mode = self.MODE_PICTURES
 
 	def init_gui(self) :
 		self.vbox = Gtk.VBox()
@@ -180,14 +180,14 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.rhythmlocradio = Gtk.RadioButton.new_with_label_from_widget(None, "Rhythmbox Location")
 		self.folderlocradio = Gtk.RadioButton.new_from_widget(self.rhythmlocradio)
                 self.folderlocradio.set_label("Song Folder")
-		self.musiclocradio = Gtk.RadioButton.new_from_widget(self.folderlocradio)
-                self.musiclocradio.set_label("Music Folder")
+		self.pictureslocradio = Gtk.RadioButton.new_from_widget(self.folderlocradio)
+                self.pictureslocradio.set_label("Pictures Folder")
 
-		self.musiclocradio.set_active(True)
+		self.pictureslocradio.set_active(True)
 	
 		self.rhythmlocradio.connect("toggled", self.toggled_rhythm_radio)
 		self.folderlocradio.connect("toggled", self.toggled_folder_radio)
-		self.musiclocradio.connect("toggled", self.toggled_music_radio)
+		self.pictureslocradio.connect("toggled", self.toggled_pictures_radio)
 
 		self.hboxlabel = Gtk.HBox();
 		
@@ -197,7 +197,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.hboxlabel.pack_start(self.selectlabel, expand = False, fill = True, padding = 0)
         	self.vbox.pack_start(self.rhythmlocradio, expand = False, fill = True, padding = 0)
         	self.vbox.pack_start(self.folderlocradio, expand = False, fill = True, padding = 0)
-        	self.vbox.pack_start(self.musiclocradio, expand = False, fill = True, padding = 0)
+        	self.vbox.pack_start(self.pictureslocradio, expand = False, fill = True, padding = 0)
         	self.vbox.pack_start(self.albumartbutton, expand = False, fill = True, padding = 0)
 
 		#---- pack everything into side panel ----#
