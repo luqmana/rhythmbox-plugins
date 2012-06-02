@@ -1,4 +1,4 @@
-import rb, re, os, urllib2
+import rb, re, os, urllib2, glib
 from gi.repository import GObject, Gtk, Pango, Peas, RB, WebKit
 from mako.template import Template
 
@@ -14,8 +14,9 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 	__gtype_name__ = 'AlbumArtSearchPlugin'
 	object = GObject.property(type = GObject.Object)
 	
-	MODE_RHYTHM = 1
-        MODE_FOLDER = 2
+	MODE_MUSIC  = 1
+	MODE_RHYTHM = 2
+        MODE_FOLDER = 3
 
 	def __init__(self):
 		GObject.Object.__init__(self)
@@ -36,7 +37,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.current_location = None
 		self.visible = True
 		
-		self.mode = self.MODE_FOLDER
+		self.mode = self.MODE_MUSIC
 
 		self.init_gui()
 		self.connect_signals()
@@ -111,15 +112,23 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		except:
 			print "Failed to download image"
 		
+		save_filename=self.current_artist + " - " + self.current_album + ".jpg"
+
+                if(self.mode == self.MODE_MUSIC):
+			covers_folder = glib.get_user_special_dir(glib.USER_DIRECTORY_MUSIC)
+			filename = covers_folder + "/" + save_filename
+
 		if(self.mode == self.MODE_RHYTHM):
-			filename = os.environ['HOME']+"/.cache/rhythmbox/covers/" + self.current_artist + " - " + self.current_album + ".jpg"
-       
-		else:
+                        covers_folder=os.environ['HOME']+"/.cache/rhythmbox/covers/"
+			filename = covers_folder + save_filename
+                        if (os.path.isdir(covers_folder) == False):
+                           os.mkdir(covers_folder)
+
+                if(self.mode == self.MODE_FOLDER):
 			location_path_improper = urllib2.url2pathname(self.current_location)
 			location_path_arr = location_path_improper.split("//")
 			location_path = location_path_arr[1]
-			filename = location_path.rsplit("/",1)[0] + "/" + "folder.jpg"
-                    
+			filename = location_path.rsplit("/",1)[0] + "/" + save_filename
 
 		output = open(filename, 'w')
 		output.write(image)
@@ -150,6 +159,10 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
     		if(self.folderlocradio.get_active()):
 	    		self.mode = self.MODE_FOLDER 
 
+    	def toggled_music_radio(self, extra):
+    		if(self.folderlocradio.get_active()):
+	    		self.mode = self.MODE_MUSIC 
+
 	def init_gui(self) :
 		self.vbox = Gtk.VBox()
 
@@ -159,15 +172,23 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
 		self.scroll.set_shadow_type(Gtk.ShadowType.IN)
 		self.scroll.add( self.webview )
-		self.albumartbutton = Gtk.Button (_("Set as Album Art"))
+		self.albumartbutton = Gtk.Button (_("Save Album Art"))
 
 		self.selectlabel = Gtk.Label()
 		self.selectlabel.set_markup("<u>Choose save location</u>")
-		self.rhythmlocradio = Gtk.RadioButton(None, "Rhythmbox Location")
-		self.folderlocradio = Gtk.RadioButton(self.rhythmlocradio, "Song Folder")
-		self.folderlocradio.set_active(True)	
+     
+		self.rhythmlocradio = Gtk.RadioButton.new_with_label_from_widget(None, "Rhythmbox Location")
+		self.folderlocradio = Gtk.RadioButton.new_from_widget(self.rhythmlocradio)
+                self.folderlocradio.set_label("Song Folder")
+		self.musiclocradio = Gtk.RadioButton.new_from_widget(self.folderlocradio)
+                self.musiclocradio.set_label("Music Folder")
+
+		self.musiclocradio.set_active(True)
+	
 		self.rhythmlocradio.connect("toggled", self.toggled_rhythm_radio)
 		self.folderlocradio.connect("toggled", self.toggled_folder_radio)
+		self.musiclocradio.connect("toggled", self.toggled_music_radio)
+
 		self.hboxlabel = Gtk.HBox();
 		
 		self.vbox.pack_start(self.scroll, expand = True, fill = True, padding = 0)
@@ -176,6 +197,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.hboxlabel.pack_start(self.selectlabel, expand = False, fill = True, padding = 0)
         	self.vbox.pack_start(self.rhythmlocradio, expand = False, fill = True, padding = 0)
         	self.vbox.pack_start(self.folderlocradio, expand = False, fill = True, padding = 0)
+        	self.vbox.pack_start(self.musiclocradio, expand = False, fill = True, padding = 0)
         	self.vbox.pack_start(self.albumartbutton, expand = False, fill = True, padding = 0)
 
 		#---- pack everything into side panel ----#
