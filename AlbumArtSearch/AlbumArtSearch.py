@@ -1,4 +1,4 @@
-import rb, re, os, urllib2, glib
+import rb, re, os, urllib2, glib, unicodedata
 from gi.repository import GObject, Gtk, Pango, Peas, RB, WebKit
 from mako.template import Template
 
@@ -134,13 +134,16 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		output.write(image)
 		output.close()
 
-	def render_album_art_search(self, artistname, albumname, currentitle):
-		self.file = self.template.render (artist = artistname, album = albumname, title = currentitle, stylesheet = self.styles )
+	def render_album_art_search(self, artistname, albumname, currenttitle):
+                stripartistname=unicodedata.normalize('NFKD', unicode(artistname, errors='replace')).encode('ascii','ignore')
+		stripalbumname=unicodedata.normalize('NFKD', unicode(albumname, errors='replace')).encode('ascii','ignore')
+		stripcurrenttitle=unicodedata.normalize('NFKD', unicode(currenttitle, errors='replace')).encode('ascii','ignore')
+		self.file = self.template.render (artist = stripartistname, album = stripalbumname, title = stripcurrenttitle, stylesheet = self.styles )
 		self.webview.load_string (self.file, 'text/html', 'utf-8', self.basepath)
 
 	def toggle_visibility (self, action) :
 		if not self.visible:
-			self.shell.add_widget (self.vbox, RB.ShellUILocation.RIGHT_SIDEBAR, True, True)
+			self.shell.add_widget (self.vbox, RB.ShellUILocation.RIGHT_SIDEBAR, expand=True, fill=True, padding=4)
 			self.visible = True
 		else:
 			self.shell.remove_widget (self.vbox, RB.ShellUILocation.RIGHT_SIDEBAR)
