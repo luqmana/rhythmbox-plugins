@@ -112,7 +112,7 @@ class Config:
 			self.preset = self.mangle(m_preset)
 
 	def preset_exists(self, preset):
-		return self.gconf.dir_exists(EQUALIZER_GCONF_PREFIX + '/' + preset)
+		return self.gconf.dir_exists(self.mangle(EQUALIZER_GCONF_PREFIX + '/' + preset))
 
 	def mangle(self, preset):
 		#return preset
