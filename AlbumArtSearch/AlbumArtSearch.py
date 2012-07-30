@@ -42,7 +42,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.init_gui()
 		self.connect_signals()
 
-		self.action = ('ToggleAlbumArtSearch', Gtk.STOCK_DND_MULTIPLE, _('Toggle album art search pane'),
+		self.action = ('ToggleAlbumArtSearch', Gtk.STOCK_DND_MULTIPLE, _('Album Art'),
 						None, _('Change the visibility of album art search pane'),
 						self.toggle_visibility, True)
 		self.action_group = Gtk.ActionGroup('AlbumArtSearchActions')
@@ -143,7 +143,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 
 	def toggle_visibility (self, action) :
 		if not self.visible:
-			self.shell.add_widget (self.vbox, RB.ShellUILocation.RIGHT_SIDEBAR, expand=True, fill=True, padding=4)
+			self.shell.add_widget (self.vbox, RB.ShellUILocation.RIGHT_SIDEBAR, expand=True, fill=True)#, padding=4)
 			self.visible = True
 		else:
 			self.shell.remove_widget (self.vbox, RB.ShellUILocation.RIGHT_SIDEBAR)
