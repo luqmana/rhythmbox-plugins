@@ -128,7 +128,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 			location_path_improper = urllib2.url2pathname(self.current_location)
 			location_path_arr = location_path_improper.split("//")
 			location_path = location_path_arr[1]
-			filename = location_path.rsplit("/",1)[0] + "/" + save_filename
+			filename = location_path.rsplit("/",1)[0] + "/cover" #+ save_filename
 
 		output = open(filename, 'w')
 		output.write(image)
