@@ -1,2 +1,16 @@
-This is just a single repo to consolidate my efforts in porting various
-Rhythmbox plugins to work with the new plugin api.
+Plugins
+=======
+
+*AlbumArtSearch*
+Do a google search for album-art and allow you to save in the rhythmbox cache/song folder or your Music folder
+
+
+
+*Equalizer*
+
+Graphical equalizer
+
+
+-----------
+
+See the individual plugins for further information.
