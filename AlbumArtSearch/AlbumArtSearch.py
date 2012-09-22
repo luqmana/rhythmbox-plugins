@@ -35,16 +35,16 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.current_album = None
 		self.current_song = None
 		self.current_location = None
-		self.visible = True
+		self.visible = False
 		
-		self.mode = self.MODE_PICTURES
+		self.mode = self.MODE_FOLDER
 
 		self.init_gui()
 		self.connect_signals()
 
 		self.action = ('ToggleAlbumArtSearch', Gtk.STOCK_DND_MULTIPLE, _('Album Art'),
 						None, _('Change the visibility of album art search pane'),
-						self.toggle_visibility, True)
+						self.toggle_visibility, False)
 		self.action_group = Gtk.ActionGroup('AlbumArtSearchActions')
 		self.action_group.add_toggle_actions([self.action])
 		uim = self.shell.props.ui_manager
@@ -186,7 +186,7 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		self.pictureslocradio = Gtk.RadioButton.new_from_widget(self.folderlocradio)
                 self.pictureslocradio.set_label("Pictures Folder")
 
-		self.pictureslocradio.set_active(True)
+		self.folderlocradio.set_active(True)
 	
 		self.rhythmlocradio.connect("toggled", self.toggled_rhythm_radio)
 		self.folderlocradio.connect("toggled", self.toggled_folder_radio)
@@ -206,5 +206,5 @@ class AlbumArtSearchPlugin(GObject.Object, Peas.Activatable):
 		#---- pack everything into side panel ----#
 		self.vbox.show_all()
 		self.vbox.set_size_request(200, -1)
-		self.shell.add_widget (self.vbox, RB.ShellUILocation.RIGHT_SIDEBAR, True, True)
+		#self.shell.add_widget (self.vbox, RB.ShellUILocation.RIGHT_SIDEBAR, True, True)
 
