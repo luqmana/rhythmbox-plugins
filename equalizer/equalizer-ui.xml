@@ -6,9 +6,4 @@
 	  </placeholder>
     </menu>
   </menubar>
-  <toolbar name="ToolBar">
-	  <placeholder name="PluginPlaceholder">
-		<toolitem name="Equalizer" action="Equalize"/>
-	  </placeholder>
-  </toolbar>
 </ui>

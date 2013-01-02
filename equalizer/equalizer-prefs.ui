@@ -1,58 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 2.12 -->
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">-24</property>
+    <property name="lower">-12</property>
     <property name="upper">12</property>
   </object>
   <object class="GtkAdjustment" id="adjustment10">
-    <property name="lower">-24</property>
+    <property name="lower">-12</property>
     <property name="upper">12</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
-    <property name="lower">-24</property>
+    <property name="lower">-12</property>
     <property name="upper">12</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
-    <property name="lower">-24</property>
+    <property name="lower">-12</property>
     <property name="upper">12</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
-    <property name="lower">-24</property>
+    <property name="lower">-12</property>
     <property name="upper">12</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
-    <property name="lower">-24</property>
+    <property name="lower">-12</property>
     <property name="upper">12</property>
   </object>
   <object class="GtkAdjustment" id="adjustment6">
-    <property name="lower">-24</property>
+    <property name="lower">-12</property>
     <property name="upper">12</property>
   </object>
   <object class="GtkAdjustment" id="adjustment7">
-    <property name="lower">-24</property>
+    <property name="lower">-12</property>
     <property name="upper">12</property>
   </object>
   <object class="GtkAdjustment" id="adjustment8">
-    <property name="lower">-24</property>
+    <property name="lower">-12</property>
     <property name="upper">12</property>
   </object>
   <object class="GtkAdjustment" id="adjustment9">
-    <property name="lower">-24</property>
+    <property name="lower">-12</property>
     <property name="upper">12</property>
   </object>
   <object class="GtkDialog" id="preferences_dialog">
     <property name="can_focus">False</property>
     <property name="can_default">True</property>
     <property name="title" translatable="yes">Equalizer Preferences</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
+    <property name="gravity">center</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="width_request">600</property>
-        <property name="height_request">420</property>
+        <property name="width_request">515</property>
+        <property name="height_request">260</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="can_default">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
@@ -60,18 +64,31 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
+              <object class="GtkComboBoxText" id="presetchooser">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="entry_text_column">0</property>
+                <property name="id_column">1</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="resetbutton1">
                 <property name="label">Reset</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -81,12 +98,11 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -96,31 +112,19 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="presetchooser">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -130,7 +134,6 @@
             <property name="can_focus">False</property>
             <property name="n_rows">11</property>
             <property name="n_columns">10</property>
-            <property name="column_spacing">3</property>
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkLabel" id="label70">
@@ -141,7 +144,7 @@
               </object>
               <packing>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -155,7 +158,7 @@
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -169,7 +172,7 @@
                 <property name="left_attach">2</property>
                 <property name="right_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -183,7 +186,7 @@
                 <property name="left_attach">3</property>
                 <property name="right_attach">4</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -197,7 +200,7 @@
                 <property name="left_attach">4</property>
                 <property name="right_attach">5</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -211,7 +214,7 @@
                 <property name="left_attach">5</property>
                 <property name="right_attach">6</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -225,7 +228,7 @@
                 <property name="left_attach">6</property>
                 <property name="right_attach">7</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -239,7 +242,7 @@
                 <property name="left_attach">7</property>
                 <property name="right_attach">8</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -253,7 +256,7 @@
                 <property name="left_attach">8</property>
                 <property name="right_attach">9</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
@@ -267,7 +270,7 @@
                 <property name="left_attach">9</property>
                 <property name="right_attach">10</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>

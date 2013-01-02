@@ -28,7 +28,7 @@ class ConfDialog(object):
 		self.conf = conf
 		gladexml = Gtk.Builder()
 		gladexml.add_from_file(glade_file)
-	
+
 		self.dialog = gladexml.get_object('preferences_dialog')
 		self.dialog.connect("response", self.dialog_response)
 		self.dialog.connect("destroy", self.on_destroy)
@@ -36,12 +36,12 @@ class ConfDialog(object):
 
 		box = gladexml.get_object("presetchooser")
 		self.box = box
-		
+
 		# workarounds
 		# see https://bugzilla.gnome.org/show_bug.cgi?id=650369#c4
 		self.box.set_entry_text_column(0)
 		self.box.set_id_column(1)
-		
+
 		self.read_presets()
 		box.connect("changed", self.preset_change)
 
@@ -51,16 +51,16 @@ class ConfDialog(object):
 			self.bands[i].connect("value_changed", self.slider_changed)
 		self.update_bands()
 		conf.apply_settings(eq)
-		
+
 	def cleanup(self):
 		self.plugin.shell.props.ui_manager.remove_action_group(self.action_group)
 		self.plugin.shell.props.ui_manager.remove_ui(self.ui)
-		
+
 	def on_destroy(self, dialog):
 		dialog.hide()
 		self.__init__(self.plugin.glade_f, self.conf, self.eq, self.plugin)
-		return True	
-        
+		return True
+
 	def read_presets(self):
 		box = self.box
 		conf = self.conf
@@ -70,7 +70,7 @@ class ConfDialog(object):
 		current = conf.demangle(conf.preset)
 		s_presets = sorted(Gst.Preset.get_preset_names(self.eq))
 		i = 1
-		box.append_text("default")	
+		box.append_text("default")
 		box.set_active(0)
 		for preset in s_presets:
 			box.append_text(preset)
@@ -89,20 +89,20 @@ class ConfDialog(object):
 		if (response == -4):
 			self.conf.write_settings()
 			dialog.hide()
-			
+
 		if (response == -6):
 			self.conf.reset_all()
 			self.box.set_active(0)
-		
+
 		if (response == -8 or response == -6):
 			if self.box.get_active_text() == "default":
 				self.conf.config = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 			else:
 				Gst.Preset.load_preset(self.eq, self.box.get_active_text())
 				self.conf.config = list(self.eq.get_property('band' + str(i)) for i in range(0,10))
-				
+
 			self.update_bands()
-						
+
 	def preset_change(self, entry):
 		new_preset = entry.get_active_text()
 		if new_preset != '':
@@ -118,16 +118,11 @@ class ConfDialog(object):
 		self.conf.config[i] = val
 		eq.set_property('band' + `i`, val)
 		self.conf.write_settings()
-		
+
 	def add_ui(self, shell):
 		plugin = self.plugin
-		icon_factory = Gtk.IconFactory()
-		pxbf = GdkPixbuf.Pixbuf.new_from_file(plugin.find_file("equalizer.svg"))
-		icon_factory.add(STOCK_IMAGE, Gtk.IconSet.new_from_pixbuf(pxbf))
-		icon_factory.add_default()
-
-		action = Gtk.Action ('Equalize', 
-				_('_Equalizer'), 
+		action = Gtk.Action ('Equalize',
+				_('_Equalizer'),
 				_('10 Band Equalizer'),
 				STOCK_IMAGE)
 		action.connect ('activate', self.show_ui, shell)
