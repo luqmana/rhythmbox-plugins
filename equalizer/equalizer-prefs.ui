@@ -51,8 +51,6 @@
     <property name="gravity">center</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="width_request">515</property>
-        <property name="height_request">260</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="can_default">True</property>
@@ -132,14 +130,13 @@
           <object class="GtkTable" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="n_rows">11</property>
+            <property name="n_rows">12</property>
             <property name="n_columns">10</property>
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkLabel" id="label70">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">29Hz</property>
               </object>
               <packing>
@@ -151,7 +148,6 @@
               <object class="GtkLabel" id="label71">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">59Hz</property>
               </object>
               <packing>
@@ -165,7 +161,7 @@
               <object class="GtkLabel" id="label72">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xpad">6</property>
                 <property name="label" translatable="yes">119Hz</property>
               </object>
               <packing>
@@ -179,7 +175,6 @@
               <object class="GtkLabel" id="label73">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">227Hz</property>
               </object>
               <packing>
@@ -193,7 +188,6 @@
               <object class="GtkLabel" id="label74">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">474Hz</property>
               </object>
               <packing>
@@ -207,7 +201,6 @@
               <object class="GtkLabel" id="label75">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">947Hz</property>
               </object>
               <packing>
@@ -221,7 +214,6 @@
               <object class="GtkLabel" id="label76">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">1889Hz</property>
               </object>
               <packing>
@@ -235,7 +227,6 @@
               <object class="GtkLabel" id="label77">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">3770Hz</property>
               </object>
               <packing>
@@ -249,7 +240,6 @@
               <object class="GtkLabel" id="label78">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">7523Hz</property>
               </object>
               <packing>
@@ -263,7 +253,6 @@
               <object class="GtkLabel" id="label79">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">15011Hz</property>
               </object>
               <packing>
@@ -282,7 +271,7 @@
               </object>
               <packing>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">11</property>
+                <property name="bottom_attach">12</property>
                 <property name="x_options">GTK_FILL</property>
               </packing>
             </child>
@@ -297,7 +286,7 @@
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">11</property>
+                <property name="bottom_attach">12</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
@@ -313,7 +302,7 @@
                 <property name="left_attach">2</property>
                 <property name="right_attach">3</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">11</property>
+                <property name="bottom_attach">12</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
@@ -329,7 +318,7 @@
                 <property name="left_attach">3</property>
                 <property name="right_attach">4</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">11</property>
+                <property name="bottom_attach">12</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
@@ -345,7 +334,7 @@
                 <property name="left_attach">4</property>
                 <property name="right_attach">5</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">11</property>
+                <property name="bottom_attach">12</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
@@ -361,7 +350,7 @@
                 <property name="left_attach">5</property>
                 <property name="right_attach">6</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">11</property>
+                <property name="bottom_attach">12</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
@@ -377,7 +366,7 @@
                 <property name="left_attach">6</property>
                 <property name="right_attach">7</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">11</property>
+                <property name="bottom_attach">12</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
@@ -393,7 +382,7 @@
                 <property name="left_attach">7</property>
                 <property name="right_attach">8</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">11</property>
+                <property name="bottom_attach">12</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
@@ -409,7 +398,7 @@
                 <property name="left_attach">8</property>
                 <property name="right_attach">9</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">11</property>
+                <property name="bottom_attach">12</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
@@ -425,7 +414,7 @@
                 <property name="left_attach">9</property>
                 <property name="right_attach">10</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">11</property>
+                <property name="bottom_attach">12</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
