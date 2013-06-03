@@ -20,6 +20,13 @@ mkdir ~/.local/share/rhythmbox/plugins
 sudo cp -r equalizer ~/.local/share/rhythmbox/plugins
 </pre>
 
+For debian and debian based systems such as Ubuntu and Linux Mint:
+
+<pre>
+sudo apt-get install gir1.2-gconf-2.0
+</pre>
+
+
 For rhythmbox v2.96 - 2.98:
 
 Enable the equalizer plugin in Edit - Plugins - Equalizer
