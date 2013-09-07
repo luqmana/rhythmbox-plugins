@@ -23,7 +23,7 @@ sudo cp -r equalizer ~/.local/share/rhythmbox/plugins
 For debian and debian based systems such as Ubuntu and Linux Mint:
 
 <pre>
-sudo apt-get install gir1.2-gconf-2.0
+sudo apt-get install gir1.2-gconf-2.0 python-lxml
 </pre>
 
 
