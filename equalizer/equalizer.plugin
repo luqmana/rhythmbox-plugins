@@ -2,6 +2,7 @@
 Loader=python
 Module=equalizer
 IAge=2
+Depends=rb
 Name=Equalizer
 Description=10 Band Equalizer
 Authors=Teemu Kallio <teemu.kallio@cs.helsinki.fi>;Floreal Morandat <morandat AT lirmm DOT fr>;Luqman Aden <laden@uwaterloo.ca>
