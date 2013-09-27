@@ -60,7 +60,7 @@ class ConfDialog(object):
 
         self.bands = []
         for i in range(0,10):
-            self.bands.append(gladexml.get_object("b" + `i`))
+            self.bands.append(gladexml.get_object("b" + repr(i)))
             self.bands[i].connect("value_changed", self.slider_changed)
         self.update_bands()
         conf.apply_settings(eq)
@@ -128,7 +128,7 @@ class ConfDialog(object):
         i = self.bands.index(hscale)
         val = self.bands[i].get_value()
         self.conf.config[i] = val
-        eq.set_property('band' + `i`, val)
+        eq.set_property('band' + repr(i), val)
         self.conf.write_settings()
 
     def add_ui(self, shell):
