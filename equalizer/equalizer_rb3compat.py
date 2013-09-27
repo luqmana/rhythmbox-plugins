@@ -1,3 +1,4 @@
+
 # -*- Mode: python; coding: utf-8; tab-width: 4; indent-tabs-mode: nil; -*-
 #
 # IMPORTANT - WHILST THIS MODULE IS USED BY SEVERAL OTHER PLUGINS
@@ -164,8 +165,8 @@ class Menu(object):
             action.associate_menuitem(item)
             self._rbmenu_items[label] = item
             bar = self.get_menu_object(menubar)
-            print menubar
-            print self.ui_filename 
+            print(menubar)
+            print(self.ui_filename)
             if position == -1:
                 bar.append(item)
             else:
@@ -611,7 +612,7 @@ class ApplicationShell(object):
                     elif popup_name == 'PodcastViewPopup':
                         plugin_type = 'podcast-episode-popup'
                     else:
-                        print "unknown type %s" % plugin_type
+                        print("unknown type %s" % plugin_type)
                         
                     index = plugin_type+action_name
                     app.add_plugin_menu_item(plugin_type, index, item)
@@ -731,9 +732,8 @@ class Action(object):
         
         '''
         if is_rb3(self.shell):
-            print self.action.get_name()
+            print(self.action.get_name())
             menuitem.set_detailed_action('win.'+self.action.get_name())
         else:
             menuitem.set_related_action(self.action)
             
-
