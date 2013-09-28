@@ -1,3 +1,4 @@
+
 # Conf.py
 #
 # Copyright (C) 2008 - Teemu Kallio <teemu.kallio@cs.helsinki.fi>
@@ -22,102 +23,102 @@ EQUALIZER_GCONF_PREFIX = '/apps/rhythmbox/plugins/equalizer'
 EQUALIZER_PRESET = 'preset'
 
 class Config:
-	def __init__(self):
-		
-		self.gconf_keys = [	'band0',
-					'band1',
-					'band2',
-					'band3',
-					'band4',
-					'band5',
-					'band6',
-					'band7',
-					'band8',
-					'band9']
+  def __init__(self):
 
-		self.gconf = GConf.Client.get_default()
-		self.config = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-		
-		# Create default preset
-		if not self.gconf.dir_exists(EQUALIZER_GCONF_PREFIX + '/default'):
-			for i in range(0, 10):
-				self.gconf.set_float(self.make_path(self.gconf_keys[i], 'default'), self.config[i])
-		
-		if self.gconf.get_string(EQUALIZER_GCONF_PREFIX+'/'+EQUALIZER_PRESET):
-			self.preset = self.gconf.get_string(EQUALIZER_GCONF_PREFIX+'/'+EQUALIZER_PRESET)
-		else:
-			self.preset = "default"
-		
-		self.read_settings(self.preset)
-		
-	def reset_all(self):
-		self.gconf.recursive_unset(EQUALIZER_GCONF_PREFIX, 0)	
-		
-		# Create default preset
-		if not self.gconf.dir_exists(EQUALIZER_GCONF_PREFIX + '/default'):
-			for i in range(0, 10):
-				self.gconf.set_float(self.make_path(self.gconf_keys[i], 'default'), self.config[i])
-				
-		self.preset = "default"
-		self.read_settings(self.preset)
+    self.gconf_keys = [	'band0',
+        'band1',
+        'band2',
+        'band3',
+        'band4',
+        'band5',
+        'band6',
+        'band7',
+        'band8',
+        'band9']
 
-	def read_settings(self, preset):
-		for i in range(0,10):
-			if preset == "default":
-	 			self.config[i] = self.read_value(preset, self.gconf_keys[i], 0.0)
-	 		else:
-	 			self.config[i] = self.read_value(preset, self.gconf_keys[i], self.config[i])
+    self.gconf = GConf.Client.get_default()
+    self.config = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-	def apply_settings(self, eq):
-		for i in range(0, 10):
-			eq.set_property('band' + `i`, self.config[i])
+    # Create default preset
+    if not self.gconf.dir_exists(EQUALIZER_GCONF_PREFIX + '/default'):
+      for i in range(0, 10):
+        self.gconf.set_float(self.make_path(self.gconf_keys[i], 'default'), self.config[i])
 
-	def write_settings(self):
-		preset = self.preset
-		self.gconf.set_string(EQUALIZER_GCONF_PREFIX+'/'+EQUALIZER_PRESET, preset)
-		for i in range(0, 10):
-			self.gconf.set_float(self.make_path(self.gconf_keys[i], preset), self.config[i])
+    if self.gconf.get_string(EQUALIZER_GCONF_PREFIX+'/'+EQUALIZER_PRESET):
+      self.preset = self.gconf.get_string(EQUALIZER_GCONF_PREFIX+'/'+EQUALIZER_PRESET)
+    else:
+      self.preset = "default"
 
-	def make_path(self, path, preset):
-		return EQUALIZER_GCONF_PREFIX+'/' + preset + '/' + path
+    self.read_settings(self.preset)
 
-	def list_preset(self):
-		return self.gconf.all_dirs(EQUALIZER_GCONF_PREFIX)
+  def reset_all(self):
+    self.gconf.recursive_unset(EQUALIZER_GCONF_PREFIX, 0)	
 
-	def read_value(self, preset, value, default):
-		gc = self.gconf
-		path = self.make_path(value, preset)
-		rv = gc.get_float(path)
-		if(not rv):
-			rv = default
-			#gc.set_float(path, default)
-		return rv
+    # Create default preset
+    if not self.gconf.dir_exists(EQUALIZER_GCONF_PREFIX + '/default'):
+      for i in range(0, 10):
+        self.gconf.set_float(self.make_path(self.gconf_keys[i], 'default'), self.config[i])
 
-	def change_preset(self, new_preset, eq):
-		if new_preset:
-			m_preset = self.mangle(new_preset)
-		else:
-			return
-			
-		if self.preset_exists(m_preset):
-			self.preset = self.mangle(m_preset)
-			self.read_settings(self.preset)
-			self.apply_settings(eq)
-		else:
-			Gst.Preset.load_preset(eq, new_preset)
-			self.gconf.set_string(EQUALIZER_GCONF_PREFIX+'/'+EQUALIZER_PRESET, m_preset)
-			self.config = list(eq.get_property('band' + str(i)) for i in range(0,10))
-			for i in range(0, 10):
-				self.gconf.set_float(self.make_path(self.gconf_keys[i], m_preset), self.config[i]) 
-			self.preset = self.mangle(m_preset)
+    self.preset = "default"
+    self.read_settings(self.preset)
 
-	def preset_exists(self, preset):
-		return self.gconf.dir_exists(self.mangle(EQUALIZER_GCONF_PREFIX + '/' + preset))
+  def read_settings(self, preset):
+    for i in range(0,10):
+      if preset == "default":
+        self.config[i] = self.read_value(preset, self.gconf_keys[i], 0.0)
+      else:
+        self.config[i] = self.read_value(preset, self.gconf_keys[i], self.config[i])
 
-	def mangle(self, preset):
-		#return preset
-		return preset.replace(' ', '_')
+  def apply_settings(self, eq):
+    for i in range(0, 10):
+      eq.set_property('band' + repr(i), self.config[i])
 
-	def demangle(self, preset):
-		#return preset
-		return preset.replace('_', ' ')
+  def write_settings(self):
+    preset = self.preset
+    self.gconf.set_string(EQUALIZER_GCONF_PREFIX+'/'+EQUALIZER_PRESET, preset)
+    for i in range(0, 10):
+      self.gconf.set_float(self.make_path(self.gconf_keys[i], preset), self.config[i])
+
+  def make_path(self, path, preset):
+    return EQUALIZER_GCONF_PREFIX+'/' + preset + '/' + path
+
+  def list_preset(self):
+    return self.gconf.all_dirs(EQUALIZER_GCONF_PREFIX)
+
+  def read_value(self, preset, value, default):
+    gc = self.gconf
+    path = self.make_path(value, preset)
+    rv = gc.get_float(path)
+    if(not rv):
+      rv = default
+      #gc.set_float(path, default)
+    return rv
+
+  def change_preset(self, new_preset, eq):
+    if new_preset:
+      m_preset = self.mangle(new_preset)
+    else:
+      return
+
+    if self.preset_exists(m_preset):
+      self.preset = self.mangle(m_preset)
+      self.read_settings(self.preset)
+      self.apply_settings(eq)
+    else:
+      Gst.Preset.load_preset(eq, new_preset)
+      self.gconf.set_string(EQUALIZER_GCONF_PREFIX+'/'+EQUALIZER_PRESET, m_preset)
+      self.config = list(eq.get_property('band' + str(i)) for i in range(0,10))
+      for i in range(0, 10):
+        self.gconf.set_float(self.make_path(self.gconf_keys[i], m_preset), self.config[i]) 
+      self.preset = self.mangle(m_preset)
+
+  def preset_exists(self, preset):
+    return self.gconf.dir_exists(self.mangle(EQUALIZER_GCONF_PREFIX + '/' + preset))
+
+  def mangle(self, preset):
+    #return preset
+    return preset.replace(' ', '_')
+
+  def demangle(self, preset):
+    #return preset
+    return preset.replace('_', ' ')
