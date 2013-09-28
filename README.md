@@ -15,9 +15,7 @@ Installation instructions:
 
 <pre>
 git clone https://github.com/luqmana/rhythmbox-plugins.git
-cd rhythmbox-plugins
-mkdir ~/.local/share/rhythmbox/plugins
-sudo cp -r equalizer ~/.local/share/rhythmbox/plugins
+cd rhythmbox-plugins/equalizer
 </pre>
 
 For debian and debian based systems such as Ubuntu and Linux Mint:
@@ -29,11 +27,28 @@ sudo apt-get install gir1.2-gconf-2.0 python-lxml
 
 For rhythmbox v2.96 - 2.98:
 
+<pre>
+./install.sh
+</pre>
+
 Enable the equalizer plugin in Edit - Plugins - Equalizer
 
-For rhythmbox v2.99 and later:
+For rhythmbox v2.99:
+
+<pre>
+./install.sh
+</pre>
 
 Enable the equalizer plugin in the app menu - Plugins - Equalizer
+
+For rhythmbox v3.0 and later:
+
+<pre>
+./install.sh --rb3
+</pre>
+
+Enable the equalizer plugin in the app menu - Plugins - Equalizer
+
 
 Open Folder
 -----------
