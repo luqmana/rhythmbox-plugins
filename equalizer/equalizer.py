@@ -19,7 +19,6 @@ from ConfDialog import ConfDialog
 import Conf
 
 import os
-
 from gi.repository import GObject, Gst, Peas
 from gi.repository import RB
 
@@ -35,6 +34,7 @@ class EqualizerPlugin(GObject.Object, Peas.Activatable):
 		self.sp = self.shell.props.shell_player
 		
 		self.conf = Conf.Config()
+		Gst.init(None)
 		self.eq = Gst.ElementFactory.make('equalizer-10bands', None)
 		self.conf.apply_settings(self.eq)
 		
